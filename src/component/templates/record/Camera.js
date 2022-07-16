@@ -12,17 +12,18 @@ import {
   StyleSheet,
   ScrollView,
   View,
+  Image,
   Text,
   StatusBar,
   TouchableOpacity
 } from 'react-native';
 import VideoRecorder from 'react-native-beautiful-video-recorder';
-
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import { useNavigation } from '@react-navigation/native';
-
+import IosHeader from '../../../util/iosHeader';
+import images from '../../../assets/imagesPath';
 const CameraScreen = () => {
   const videoRecorder = useRef(null)
   const navigation = useNavigation();
@@ -44,9 +45,12 @@ const CameraScreen = () => {
 
   return (
     <SafeAreaView>
-    <StatusBar barStyle="light-content" />
-    {Platform.OS === 'ios' ? <Header />:<></>}
-    <VideoRecorder ref={videoRecorder} compressQuality={'high'}></VideoRecorder>
+      <View style={{ flexDirection:'row' }}>
+        {Platform.OS === 'ios' ? <TouchableOpacity onPress={() => { navigation.goBack(); }}>
+                <Image style={{ marginLeft:20, width: 45, height: 45, backgroundColor: "white" }} source={images.whiteBackArrow} tintColor="#fff"></Image>
+              </TouchableOpacity>: <></>}
+        <VideoRecorder style={{ marginTop: 50, paddingTop: 30 }} ref={videoRecorder} compressQuality={'high'}></VideoRecorder>
+      </View>
     </SafeAreaView>
   );
 };

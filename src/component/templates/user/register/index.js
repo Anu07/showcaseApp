@@ -97,7 +97,7 @@ const RegisterScreen = ({ navigation }) => {
 
                             <TextInput
                                 keyboardType="default"
-                                placeholder='Username'
+                                placeholder='Fullname'
                                 placeholderTextColor="gray"
                                 selectionColor='black'
                                 theme={{
@@ -113,7 +113,6 @@ const RegisterScreen = ({ navigation }) => {
                                 }}
                                 autoFocus={true}
                                 style={{ marginBottom: 10, borderWidth: 0 }}
-                                backgroundColor="#F8F7FD"
                                 left={<TextInput.Icon name="account" size={25} color={'#9E9E9E'} />}
                                 returnKeyType="next"
                                 {...Platform.OS === 'android' ? mode = "outlined" : ""}
@@ -139,7 +138,6 @@ const RegisterScreen = ({ navigation }) => {
                                     setEmail(text)
                                     setEmailErrorText("")
                                 }}
-                                backgroundColor="#F8F7FD"
                                 left={<TextInput.Icon name="email" size={22} color={'#9E9E9E'} style={{ margin: 10 }} />}
                                 returnKeyType="next"
                                 style={{ marginBottom: 10, borderWidth: 0 }}
@@ -161,7 +159,6 @@ const RegisterScreen = ({ navigation }) => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
                                 placeholder='Password'
                                 placeholderTextColor="gray"
                                 style={{ marginBottom: 10, borderWidth: 0 }}

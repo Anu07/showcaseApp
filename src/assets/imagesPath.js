@@ -9,6 +9,7 @@ const images = {
 	logoOnly: require('../assets/images/logoOnly.png'),
 	logOut: require('../assets/images/logout.png'),
 	backArrow: require('../assets/images/back_Arrow.png'),
+	whiteBackArrow: require('../assets/images/back.png'),
 	overflowMenuIcon: require('../assets/images/left_menu.png'),
 	searchIcon:  require('../assets/images/search_icon.png'),
 	notificationIcon:  require('../assets/images/notification_icon.png'),

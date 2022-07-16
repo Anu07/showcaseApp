@@ -66,8 +66,9 @@ class ForgotPassword extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <View style={[styles.bottomView,{backgroundColor:this.props.backgroundColor}]}>
+            <View style={[styles.root]}>
+            <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
+            <SafeAreaView style={styles.safeAreaView}>
                     <TouchableOpacity style={styles.btnClose} activeOpacity={0.6} onPress={() => this.btnClosePress()}>
                         <Image source={images.close}/>
                     </TouchableOpacity>
@@ -83,10 +84,156 @@ class ForgotPassword extends Component {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </SafeAreaView>
+                </ImageBackground>
             </View>
         );
     }
+}
+
+
+
+function useStyles() {
+    return StyleSheet.create({
+        container: {
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: 10,
+        },
+        button: {
+            alignItems: 'center',
+            backgroundColor: '#F2B518',
+            borderRadius: 8,
+            height: 48,
+            justifyContent: 'center',
+        },
+        buttonTitle: {
+            color: '#FFFFFF',
+            fontSize: 17,
+            fontWeight: '600',
+            lineHeight: 22,
+        },
+        titleText: {
+            textAlign: 'center',
+            color: '#000000',
+            fontFamily: "Urbanist-Bold",
+            fontWeight: "bold",
+            alignSelf: 'flex-start',
+            justifyContent: 'flex-start',
+            fontSize: 42,
+        },
+        errorTextStyle: {
+            color: '#FF0000',
+            textAlign: 'center',
+            fontSize: 12,
+            textAlign: 'left'
+        },
+        subTitleText: {
+            color: "#F2B518",
+            textAlign: 'center',
+            fontFamily: "Urbanist-Bold",
+            fontWeight: "bold",
+            fontSize: 20,
+            margin: 15
+        },
+        checkboxContainer: {
+            flexDirection: "row",
+            width: '100%',
+            margin: 10,
+        },
+        checkbox: {
+            alignSelf: "center",
+            color: '#F2B518'
+        },
+        content: {
+            flex: 1,
+            justifyContent: 'center',
+            paddingHorizontal: 16,
+            paddingVertical: 32,
+        },
+
+        forgotPasswordContainer: {
+            alignItems: 'center',
+            margin: 5,
+            fontFamily: "Urbanist-Regular",
+        },
+        form: {
+            alignItems: 'center',
+            backgroundColor: '#ffffff',
+            borderRadius: 8,
+            flexDirection: 'row',
+            marginBottom: 10,
+            height: 48,
+            paddingHorizontal: 16,
+        },
+        label: {
+            color: '#9E9E9E',
+            fontSize: 15,
+            fontWeight: '400',
+            lineHeight: 20,
+            width: 80,
+        },
+        normalText: {
+            color: "#9e9e9e",
+            textAlign: 'center',
+            fontFamily: "Urbanist-Regular",
+            fontWeight: "normal",
+            justifyContent: 'center',
+            fontSize: 15,
+        },
+        root: {
+            backgroundColor: '#000000',
+            flex: 1,
+            justifyContent: 'center',
+        },
+        safeAreaView: {
+            flex: 1,
+            alignItems: 'center'
+        },
+        subtitle: {
+            color: 'rgba(235, 235, 245, 0.6)',
+            fontSize: 17,
+            fontWeight: '400',
+            lineHeight: 22,
+        },
+        textButton: {
+            color: '#F2B518',
+            fontSize: 18,
+            fontWeight: '400',
+            fontFamily: "Urbanist-Bold",
+            marginBottom: 10,
+            marginTop: 10,
+            lineHeight: 20,
+        },
+        textInput: {
+            color: '#9E9E9E',
+            backgroundColor: '#F8F7FD',
+            height: 35,
+            width: "100%",
+            borderRadius: 10,
+            padding: 10,
+            marginBottom: 10,
+        },
+        title: {
+            color: '#FFFFFF',
+            fontSize: 28,
+            fontWeight: '700',
+            lineHeight: 34,
+        },
+        loading: {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            opacity: 0.5,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#F5FCFF88'
+        },
+    });
 }
 
 export default ForgotPassword;

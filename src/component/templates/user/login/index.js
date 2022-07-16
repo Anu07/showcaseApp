@@ -84,9 +84,9 @@ const LoginScreen = ({ navigation }) => {
     return (
         <View style={[styles.root]}>
             <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
-            <SafeAreaView style={styles.safeAreaView}>
+                <SafeAreaView style={styles.safeAreaView}>
                     <ScrollView contentContainerStyle={{ height: '100%' }}>
-                    {Platform.OS === 'ios' ? <Header />:<></>}
+                        {Platform.OS === 'ios' ? <Header /> : <></>}
                         <KeyboardAvoidingView
                             style={styles.content}>
                             <Text style={styles.titleText}>Login into your</Text>
@@ -103,7 +103,7 @@ const LoginScreen = ({ navigation }) => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
+                                leftIconContainerStyle={{ marginLeft: 10, marginRight: 10 }}
                                 left={<TextInput.Icon name="email" size={22} color={'#9E9E9E'} />}
                                 returnKeyType="next"
                                 onSubmitEditing={() => { ref_input2.current.focus(); }}
@@ -132,7 +132,6 @@ const LoginScreen = ({ navigation }) => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
                                 {...Platform.OS === 'android' ? mode = "outlined" : ""}
 
                                 placeholder='Password'
@@ -189,8 +188,8 @@ const LoginScreen = ({ navigation }) => {
 
                         </KeyboardAvoidingView>
                     </ScrollView>
-                    </SafeAreaView>
-                </ImageBackground>
+                </SafeAreaView>
+            </ImageBackground>
         </View>);
 
 }
@@ -334,6 +333,25 @@ function useStyles() {
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#F5FCFF88'
+        },
+        searchSection: {
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#fff',
+        },
+        searchIcon: {
+            padding: 10,
+        },
+        input: {
+            flex: 1,
+            paddingTop: 10,
+            paddingRight: 10,
+            paddingBottom: 10,
+            paddingLeft: 0,
+            backgroundColor: '#fff',
+            color: '#424242',
         },
     });
 }
