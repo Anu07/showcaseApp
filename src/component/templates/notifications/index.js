@@ -29,12 +29,16 @@ export default class Notifications extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{ flex: 1,
+      <SafeAreaView style={{
+        flex: 1,
         alignItems: 'center',
-        paddingStart:50}}>
-      <Header title={"Notifications"} />
+        paddingStart: 50
+      }}>
+        <StatusBar animated={true}
+          backgroundColor="#F2B518" />
+        <Header title={"Notifications"} />
         <FlatList
-          style={[styles.root,{flexGrow:1}]}
+          style={[styles.root, { flexGrow: 1 }]}
           data={this.state.data}
           extraData={this.state}
           ItemSeparatorComponent={() => {
@@ -80,7 +84,7 @@ export default class Notifications extends Component {
 const styles = StyleSheet.create({
   root: {
     backgroundColor: "#FFFFFF",
-    height:'80%',
+    height: '80%',
   },
   containers: {
     flex: 1,
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
-    flex:1,
+    flex: 1,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: "#FFFFFF",

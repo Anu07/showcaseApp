@@ -102,7 +102,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2B518',
     borderRadius: 8,
-    height: 48,
+    height: 40,
     justifyContent: 'center',
   },
   buttonTitle: {

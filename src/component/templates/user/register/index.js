@@ -1,31 +1,34 @@
 // Import React and Component
-import React, { useState, createRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     StyleSheet,
     View,
     Text,
-    TouchableOpacity,
     ToastAndroid,
     Platform,
     Alert,
-    SafeAreaView,
+    Keyboard,
+    TouchableOpacity,
     ScrollView,
+    SafeAreaView,
     KeyboardAvoidingView,
     ImageBackground,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import CheckBox from '@react-native-community/checkbox';
+import { ActivityIndicator } from 'react-native-paper';
 Icon.loadFont();
 import { TextInput } from 'react-native-paper';
-import { ActivityIndicator } from 'react-native-paper';
 import images from '../../../../assets/imagesPath';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../../../util/iosHeader';
+import Snackbar from 'react-native-snackbar';
 
 const RegisterScreen = ({ navigation }) => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [email, setEmail] = React.useState("");
+    const [showPassword, setShowPassword] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [passworderrortext, setPasswordErrorText] = React.useState("");
     const [emailerrortext, setEmailErrorText] = React.useState("");
@@ -56,10 +59,10 @@ const RegisterScreen = ({ navigation }) => {
                         setLoading(false);
                         console.log(responseJson.id);
                         AsyncStorage.setItem('id', responseJson.id);
-                        notifyMessage(responseJson.message);
+                        notify(responseJson.message);
                         navigation.navigate("Onboarding");
                     } else {
-                        notifyMessage(responseJson.message);
+                        notify(responseJson.message);
                     }
                 })
                 .catch(error => console.log(error)) //to catch the errors if any
@@ -71,33 +74,35 @@ const RegisterScreen = ({ navigation }) => {
         } else {
             setPasswordErrorText("Pasword can't be left empty.")
         }
-
     }
 
 
-    function notifyMessage(msg) {
-        if (Platform.OS === 'android') {
-            ToastAndroid.show(msg, ToastAndroid.SHORT)
+    const notify = (message) => {
+        if (Platform.OS != 'android') {
+            Snackbar.show({
+                text: message,
+                duration: Snackbar.LENGTH_SHORT,
+            });
         } else {
-            Alert.alert(msg);
+            ToastAndroid.show(message, ToastAndroid.SHORT);
         }
     }
 
 
     return (
         <View style={[styles.root]}>
-        <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
-        <SafeAreaView style={styles.safeAreaView}>
-                <ScrollView contentContainerStyle={{ height: '100%' }}>
-                {Platform.OS === 'ios' ? <Header />:<></>}
-                    <KeyboardAvoidingView
+            <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
+                <SafeAreaView style={styles.safeAreaView}>
+                    <ScrollView contentContainerStyle={{ height: '100%' }}>
+                        {Platform.OS === 'ios' ? <Header /> : <></>}
+                        <KeyboardAvoidingView
                             style={styles.content} >
                             <Text style={styles.titleText}>Create your</Text>
                             <Text style={[styles.titleText, { color: '#F2B518' }]}>Account</Text>
 
                             <TextInput
                                 keyboardType="default"
-                                placeholder='Fullname'
+                                placeholder='Full name'
                                 placeholderTextColor="gray"
                                 selectionColor='black'
                                 theme={{
@@ -150,7 +155,7 @@ const RegisterScreen = ({ navigation }) => {
                             ) : <></>}
 
                             <TextInput
-                                secureTextEntry
+                                secureTextEntry={!showPassword}
                                 selectionColor='#000'
                                 theme={{
                                     colors: {
@@ -160,16 +165,21 @@ const RegisterScreen = ({ navigation }) => {
                                     }
                                 }}
                                 placeholder='Password'
-                                placeholderTextColor="gray"
                                 style={{ marginBottom: 10, borderWidth: 0 }}
-                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
                                 onChangeText={(text) => {
                                     setPassword(text)
                                     setPasswordErrorText("")
                                 }}
+                                placeholderTextColor="gray"
                                 left={<TextInput.Icon name="lock" size={25} color={'#9E9E9E'} />}
-                                right={<TextInput.Icon name="eye" size={25} color={'#9E9E9E'} />}
-                            />
+                                right={showPassword == true ? <TextInput.Icon name="eye" size={25} color={'#9E9E9E'} onPress={() => {
+                                    Keyboard.dismiss()
+                                    setShowPassword(false)
+                                }} /> : <TextInput.Icon name="eye-off" size={25} color={'#9E9E9E'} onPress={() => {
+                                    Keyboard.dismiss()
+                                    setShowPassword(true)
+                                }} />}
+                                />
                             {passworderrortext != '' ? (
                                 <Text style={styles.errorTextStyle}>
                                     {passworderrortext}
@@ -182,8 +192,10 @@ const RegisterScreen = ({ navigation }) => {
                                     <CheckBox
                                         disabled={false}
                                         value={toggleCheckBox}
-                                        style={{ color: '#000000',height: 22,
-                                        width: 22, }}
+                                        style={{
+                                            color: '#000000', height: 22,
+                                            width: 22,
+                                        }}
                                         onValueChange={(newValue) => setToggleCheckBox(newValue)}
                                     />
                                     <Text style={{ margin: 5, color: '#000000' }}>Sign Up for push notifications</Text>
@@ -193,27 +205,28 @@ const RegisterScreen = ({ navigation }) => {
 
                             {loading == true ? <ActivityIndicator size='large' color="#F2B518" /> : <></>}
 
-                            <TouchableOpacity onPress={() => {
-                                onSignUp();
-                            }}>
+                            <TouchableOpacity onPress={onSignUp}>
                                 <View style={styles.button}>
                                     <Text style={styles.buttonTitle} >Sign Up</Text>
                                 </View>
                             </TouchableOpacity>
                             <Text style={[styles.normalText, { color: "#9E9E9E", marginTop: 15, marginBottom: 15 }]}>By continuing, you agree to accept our Privacy Policy and Terms of Service.</Text>
-                            <View style={{flexDirection: 'row', width: '100%',justifyContent: 'center', marginTop:20 }}>
+                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', marginTop: 20 }}>
                                 <Text style={{ justifyContent: 'center', color: '#9e9e9e' }}>Already have an account?</Text>
-                                <Text style={{ color: '#F2B518', marginLeft: 10 }} onPress={() => {
-                                    // navigation.navigate("Login");
-                                    console.log("Tesr");
+                                <TouchableOpacity onPress={
+                                    console.log("Tesr ")
+                                }>
+                                    <Text style={{ color: '#F2B518', marginLeft: 10 }} onPress={() => {
+                                    navigation.navigate("Login");
                                 }}>Sign In</Text>
+                                </TouchableOpacity>
                             </View>
                         </KeyboardAvoidingView>
-                        <View style={{ height: 200 }}></View>
+                        <View style={{ height: 210 }}></View>
                     </ScrollView>
-                    </SafeAreaView>
-                </ImageBackground>
-        </View>
+                </SafeAreaView>
+            </ImageBackground>
+        </View >
     );
 };
 

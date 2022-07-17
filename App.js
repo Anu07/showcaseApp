@@ -17,6 +17,7 @@ import CameraScreen from './src/component/templates/record/Camera';
 import ProfileScreen from './src/component/templates/profile';
 import SettingsScreen from './src/component/templates/setting';
 import DrawerScreen from './src/component/templates/navigation/Drawer';
+import EditProfileScreen from './src/component/templates/profile/EditProfile';
 import ForgotPassword from './src/component/templates/user/forgot';
 
 const Stack = createNativeStackNavigator()
@@ -47,6 +48,7 @@ export default function App() {
           <Stack.Screen name="Camera" component={CameraScreen} />
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Forgot" component={ForgotPassword} />
+          <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

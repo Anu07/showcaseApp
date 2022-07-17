@@ -1,94 +1,146 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
-    Text,
     View,
+    Text,
+    ToastAndroid,
+    Platform,
+    Alert,
+    Keyboard,
     TouchableOpacity,
-    TextInput,
-    Image,
+    ScrollView,
+    SafeAreaView,
+    KeyboardAvoidingView,
+    ImageBackground,
 } from 'react-native';
-
-import styles from '../../../../util/styles';
+import { ActivityIndicator } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import images from '../../../../assets/imagesPath';
+import Header from '../../../../util/header';
+import Snackbar from 'react-native-snackbar';
 
-class ForgotPassword extends Component {
-    /**
-     * Default props
-     */
-    static defaultProps = {   
-        backgroundColor :"white",
-        titleText:"Forgot Password",
-        submitText:"Send",
-        placeHolderText:"Email Address"
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-           email:""
-        };
-    }
+const ForgotPassword = ({navigation}) => {
+    const [username, setUsername] = React.useState("");
+    const [emailerrortext, setEmailErrorText] = React.useState("");
+    const styles = useStyles();
+    const [loading, setLoading] = React.useState(false);
 
     /**
      * Validate email
      */
-    validateEmail = function(email) {
+    validateEmail = function (username) {
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email);
+        return re.test(username);
+    };
+
+
+    const notify = (message) => {
+        if (Platform.OS != 'android') {
+            Snackbar.show({
+                text: message,
+                duration: Snackbar.LENGTH_SHORT,
+            });
+        } else {
+            ToastAndroid.show(message, ToastAndroid.SHORT);
+        }
     }
 
     /**
      * Button submit pressed
      */
-    btnSubmitPress() {
-        if (this.state.email.trim().length == 0) {
+    function btnSubmitPress() {
+        if (emailerrortext.length != 0) {
             console.log("Please enter email");
-          }else if(this.validateEmail(this.state.email) == false){
-            console.log("Please enter valid email");
-          }else {
-            this.callForgotPassword();
-          }
+            notify("Please enter email");
+        } else if (this.validateEmail(username) == false) {
+            ToastAndroid.show("Please enter email", ToastAndroid.SHORT)
+            notify("Please enter email");
+        } else {
+            callForgotPassword();
+        }
     }
 
     /**
      * Call your webservice for forgot pasword
      */
-    callForgotPassword(){
-     
+    function callForgotPassword() {
+        setLoading(true);
+        fetch('https://showcase.ampleteckdev.com/api/forgot', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: username,
+            })
+        })
+            .then(response => response.json())
+            .then((responseJson) => {
+                setLoading(false);
+                console.log(responseJson);
+                if (responseJson.status == "Success") {
+                    setLoading(false);
+                    notify(responseJson.message);
+                    navigation.navigate("Login");
+                } else {
+                    notify(responseJson.message);
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false);
+            }) //to catch the errors if any
     }
 
-    /**
-     * Button close pressed
-     */
-    btnClosePress(){
-        this.props.callbackAfterForgotPassword(0, this.props.otherParamsToSend);
-    }
-
-    render() {
-        return (
-            <View style={[styles.root]}>
+    return (
+        <View style={[styles.root]}>
             <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
-            <SafeAreaView style={styles.safeAreaView}>
-                    <TouchableOpacity style={styles.btnClose} activeOpacity={0.6} onPress={() => this.btnClosePress()}>
-                        <Image source={images.close}/>
-                    </TouchableOpacity>
-                    <Text style={styles.textHeader}>{this.props.titleText}</Text>
-                    <View style={styles.starView}>
-                        <View style={styles.inputView}>
-                            <TextInput style={styles.inputText} placeholder={this.props.placeHolderText}
-                            multiline={false} placeholderTextColor={'#3c3c3c'} autoCapitalize={'none'} keyboardType={'email-address'} autoCorrect={false} underlineColorAndroid={'transparent'} onChangeText={(email) => this.setState({email})} value={this.state.email}></TextInput>
-                        </View>
-                        <TouchableOpacity style={styles.btnCancel} activeOpacity={0.6} onPress={() => this.btnSubmitPress()}>
-                            <Text style={styles.textCancel} numberOfLines={1}>
-                            {this.props.submitText}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+                <SafeAreaView style={styles.safeAreaView}>
+                    <ScrollView contentContainerStyle={{ height: '40%' }}>
+                        {Platform.OS === 'ios' ? <Header title={"Forgot Password"} /> : <></>}
+                        <KeyboardAvoidingView
+                            style={[styles.content, { marginTop: 50, paddingHorizontal: 20 }]}>
+                            <Text style={[styles.titleText, { paddingHorizontal: 20, paddingVertical: 20 }]}>Forgot Password?</Text>
+                            <TextInput
+                                keyboardType="email-address"
+                                placeholder='Email'
+                                selectionColor='#000'
+                                placeholderTextColor="gray"
+                                theme={{
+                                    colors: {
+                                        primary: '#F8F7FD',
+                                        text: 'black',
+                                        background: '#F8F7FD',
+                                    }
+                                }}
+                                returnKeyType="next"
+                                onSubmitEditing={() => { ref_input2.current.focus(); }}
+                                onChangeText={(text) => {
+                                    setUsername(text)
+                                    setEmailErrorText("")
+                                }}
+                                style={{ marginBottom: 10, borderWidth: 0 }}
+                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
+                            />
+
+                            {emailerrortext != '' ? (
+                                <Text style={styles.errorTextStyle}>
+                                    {emailerrortext}
+                                </Text>
+                            ) : <></>}
+                            <TouchableOpacity onPress={btnSubmitPress}>
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonTitle}>Submit</Text>
+                                </View>
+                            </TouchableOpacity>
+                            {loading == true ? <ActivityIndicator size='large' color="#F2B518" /> : <></>}
+                        </KeyboardAvoidingView>
+                    </ScrollView>
                 </SafeAreaView>
-                </ImageBackground>
-            </View>
-        );
-    }
+            </ImageBackground>
+        </View>
+    );
 }
 
 
@@ -235,5 +287,4 @@ function useStyles() {
         },
     });
 }
-
 export default ForgotPassword;

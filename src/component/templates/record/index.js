@@ -10,20 +10,20 @@ const recordText = "Record your video to submit to Showcase Media.  All submissi
 const RecordScreen = () => {
     const navigation = useNavigation();
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1, color: '#ffffff' }}>
-            <View style={style.root}>
+        <View style={style.root}>
+            <ImageBackground source={images.recordBg} resizeMode="cover" style={style.container}>
                 <SafeAreaView style={style.safeAreaView}>
                     <StatusBar animated={true}
                         backgroundColor="#FFFFFF" />
-                    <ImageBackground source={images.recordBg} resizeMode="cover" style={style.container}>
+                    <ScrollView contentContainerStyle={{ height:'55%'}}>
                         <Header title={"Record Videos"} />
-                        <View style={{ height: 150 }}></View>
                         <Text style={style.textGray}>{recordText}</Text>
                         <View style={{ flex: 1, margin: 15 }}>
                             <TextInput
                                 keyboardType="default"
                                 placeholder='Video Type'
                                 placeholderTextColor="gray"
+                                selectionColor='#000'
                                 theme={{
                                     colors: {
                                         primary: '#F8F7FD',
@@ -31,9 +31,8 @@ const RecordScreen = () => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
                                 returnKeyType="next"
-                                mode="outlined"
+                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
                                 style={{ marginBottom: 10 }}
                             />
                             <TextInput
@@ -47,9 +46,9 @@ const RecordScreen = () => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
+                                selectionColor="#000"
                                 returnKeyType="next"
-                                mode="outlined"
+                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
                                 style={{ marginBottom: 10 }}
                             />
                             <TextInput
@@ -61,8 +60,8 @@ const RecordScreen = () => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                backgroundColor="#F8F7FD"
-                                mode="outlined"
+                                selectionColor="#000"
+                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
                                 placeholder='Description'
                                 placeholderTextColor="gray"
                             />
@@ -79,10 +78,11 @@ const RecordScreen = () => {
                             <Text style={[style.normalText, { color: "#9e9e9e", marginTop: 20, marginBottom: 15 }]}>By continuing, you agree to accept our Privacy Policy and Terms of Service.</Text>
                             <View style={{ height: 40 }}></View>
                         </View>
-                    </ImageBackground>
+                    </ScrollView>
                 </SafeAreaView>
-            </View>
-        </ScrollView>);
+            </ImageBackground>
+        </View>
+    );
 }
 
 export default RecordScreen;

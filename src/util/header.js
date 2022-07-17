@@ -15,13 +15,13 @@ const Header = ({ title }) => {
                 <View style={style.headerIcon}>
                     {title !== "Videos" || Platform.ios ?
                         <View style={{
-                            marginLeft: 20,
+                            marginLeft: 10,
                         }}>
                             <TouchableOpacity onPress={() => { 
                                 console.log("back clicked");
-                                // navigation.navigate("Drawer"); 
+                                navigation.goBack(); 
                                 }}>
-                                <Image style={{ width: 35, height: 40 }} source={images.backArrow}></Image>
+                                <Image style={{ width: 35, height: 40, marginTop:5 }} source={images.backArrow}></Image>
                             </TouchableOpacity>
                         </View> : <TouchableOpacity onPress={() => {
                             console.log("Clicked");

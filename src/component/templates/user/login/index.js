@@ -19,9 +19,11 @@ import CheckBox from '@react-native-community/checkbox';
 import { ActivityIndicator } from 'react-native-paper';
 Icon.loadFont();
 import { TextInput } from 'react-native-paper';
+
 import images from '../../../../assets/imagesPath';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../../../../util/iosHeader';
+import Snackbar from 'react-native-snackbar';
 
 const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = React.useState("");
@@ -42,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
-                },
+                                },
                 body: JSON.stringify({
                     username: username,
                     password: password
@@ -51,15 +53,16 @@ const LoginScreen = ({ navigation }) => {
                 .then(response => response.json())
                 .then((responseJson) => {
                     setLoading(false);
-                    console.log(responseJson);
+                    console.log("api kket",responseJson.data.apikey);
                     if (responseJson.status == "Success") {
                         setLoading(false);
-                        notifyMessage(responseJson.message);
+                        notify("Login Successful");
                         navigation.navigate("Drawer");
                         console.log(responseJson.data.id);
                         AsyncStorage.setItem('id', JSON.stringify(responseJson.data.id));
+                        AsyncStorage.setItem('apiKey', JSON.stringify(responseJson.data.apikey));
                     } else {
-                        notifyMessage(responseJson.message);
+                        notify(responseJson.message);
                     }
                 })
                 .catch(error => console.log(error)) //to catch the errors if any
@@ -72,14 +75,16 @@ const LoginScreen = ({ navigation }) => {
     }
 
 
-    function notifyMessage(msg) {
-        if (Platform.OS === 'android') {
-            ToastAndroid.show(msg, ToastAndroid.SHORT)
+    const notify = (message) => {
+        if (Platform.OS != 'android') {
+            Snackbar.show({
+                text: message,
+                duration: Snackbar.LENGTH_SHORT,
+            });
         } else {
-            Alert.alert("Login Successful");
+            ToastAndroid.show(message, ToastAndroid.SHORT);
         }
     }
-
 
     return (
         <View style={[styles.root]}>
@@ -163,7 +168,7 @@ const LoginScreen = ({ navigation }) => {
                                 />
                                 <Text style={[styles.normalText, { margin: 5 }]}>Remember me</Text>
                             </View>
-                            {loading == true ? <ActivityIndicator size='large' color="#F2B518" /> : <></>}
+                            {loading == true ? <ActivityIndicator size='large' style={styles.loading} color="#F2B518" /> : <></>}
 
                             <TouchableOpacity onPress={onLogin}>
                                 <View style={styles.button}>
@@ -172,7 +177,7 @@ const LoginScreen = ({ navigation }) => {
                             </TouchableOpacity>
                             <View style={styles.forgotPasswordContainer}>
                                 <Text style={styles.textButton} onPress={() => {
-                                    // navigation.navigate("Forgot");
+                                    navigation.navigate("Forgot");
                                 }}>Forgot password?</Text>
                             </View>
                             <Text style={[styles.normalText, { color: "#9E9E9E", flex: 1, marginTop: 15, marginBottom: 15 }]}>By continuing, you agree to accept our Privacy Policy and Terms of Service.</Text>
@@ -181,7 +186,6 @@ const LoginScreen = ({ navigation }) => {
                                 <Text onPress={() => {
                                     navigation.navigate("Register");
                                 }} style={{ color: '#F2B518', marginLeft: 5 }}>Sign up now.</Text>
-
                             </View>
 
                             <View style={{ height: 250 }}></View>

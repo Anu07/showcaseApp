@@ -6,7 +6,6 @@ import {
     Text,
     TouchableOpacity,
     SafeAreaView,
-    Image,
     ScrollView,
     KeyboardAvoidingView,
     ImageBackground,
@@ -16,13 +15,12 @@ Icon.loadFont();
 import { TextInput } from 'react-native-paper';
 import images from '../../../assets/imagesPath';
 import { Dropdown } from 'react-native-element-dropdown';
+import Header from '../../../util/header';
 import { ActivityIndicator } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
-import commonStyle from '../../../util/styles';
-import ProfileHeader from '../../../util/ProfileHeader';
 
-const ProfileScreen = ({ navigation }) => {
+const EditProfileScreen = ({ navigation }) => {
     const styles = useStyles();
     const data = [
         { label: 'SportsPerson', value: '1' },
@@ -52,14 +50,14 @@ const ProfileScreen = ({ navigation }) => {
 
     const getProfile = async () => {
         setLoading(true);
-        AsyncStorage.getItem('apikey').then((value) => {
-            console.log("ksdghj", value);
+        AsyncStorage.getItem('apikey').then((value) =>{
+            console.log("ksdghj",value);
             fetch('https://showcase.ampleteckdev.com/api/getuser', {
                 method: 'GET',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': '0WBVZ9CAJFbbmA3OSIfj8SoRYAhmMKImJQkYqEKt'
+                    'Authorization': value
                 },
             })
                 .then(response => response.json())
@@ -77,7 +75,7 @@ const ProfileScreen = ({ navigation }) => {
                     console.log(error)
                     setLoading(false);
                 }) //to catch the errors if any
-        }
+            }
 
         );
     }
@@ -98,6 +96,8 @@ const ProfileScreen = ({ navigation }) => {
         getProfile();
     }, []);
 
+
+
     return (
         <View style={styles.root}>
             <ImageBackground source={images.recordBg} resizeMode="cover" style={styles.container}>
@@ -105,12 +105,11 @@ const ProfileScreen = ({ navigation }) => {
                     <ScrollView contentContainerStyle={{ height: '100%' }}>
                         <KeyboardAvoidingView
                             style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 10 }}>
-                           <ProfileHeader title={"Profile"}/>
+                            <Header title={"Edit Profile"} />
                             <TextInput
                                 keyboardType="default"
                                 placeholder='Full Name'
                                 placeholderTextColor="gray"
-                                editable={false}
                                 selectionColor='#000'
                                 theme={{
                                     colors: {
@@ -121,8 +120,12 @@ const ProfileScreen = ({ navigation }) => {
                                 }}
                                 backgroundColor="#F8F7FD"
                                 returnKeyType="next"
-                                value={username}
+                                value = {username}
                                 {...Platform.OS === 'android' ? mode = "outlined" : ""}
+                                onChangeText={(text) => {
+                                    setUsername(text)
+                                    setUsernameErrorText("")
+                                }}
                                 style={{ margin: 5 }}
                             />
 
@@ -138,13 +141,16 @@ const ProfileScreen = ({ navigation }) => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                editable={false}
-                                value={email}
+                                value = {email}
+                                onChangeText={(text) => {
+                                    setEmail(text)
+                                    setEmailErrorText("")
+                                }}
                                 backgroundColor="#F8F7FD"
                                 returnKeyType="next"
                                 {...Platform.OS === 'android' ? mode = "outlined" : ""}
-                                style={{ margin: 5 }}
 
+                                style={{ margin: 5 }}
                             />
 
 
@@ -162,12 +168,25 @@ const ProfileScreen = ({ navigation }) => {
                                 {...Platform.OS === 'android' ? mode = "outlined" : ""}
                                 placeholder='Current Password'
                                 placeholderTextColor="gray"
-                                editable={false}
-                                value="*******"
                                 style={{ margin: 5 }}
-
                             />
 
+                            <TextInput
+                                secureTextEntry
+                                theme={{
+                                    colors: {
+                                        primary: '#F8F7FD',
+                                        text: 'black',
+                                        background: '#F8F7FD',
+                                    }
+                                }}
+                                backgroundColor="#F8F7FD"
+                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
+                                placeholder='New Password'
+                                placeholderTextColor="gray"
+                                selectionColor='#000'
+                                style={{ margin: 5 }}
+                            />
 
                             <View style={{ flex: 1, margin: 10 }}>
                                 <View style={styles.customContainer}>
@@ -213,10 +232,10 @@ const ProfileScreen = ({ navigation }) => {
                                     </View>
                                 </View>
                                 {loading == true ? <ActivityIndicator size='large' style={styles.loading} color="#F2B518" /> : <></>}
-                                <View style={{ height: 30 }}></View>
-
+                                <View style={{ height: 20 }}></View>
                                 <View style={{ flex: 1, marginTop: 20 }}>
                                 <View style={styles.customContainer}>
+
                                     <Dropdown
                                         style={[styles.dropdown, isFocus && { borderColor: '#ededed', borderWidth: 1 }]}
                                         placeholderStyle={styles.placeholderStyle}
@@ -235,11 +254,16 @@ const ProfileScreen = ({ navigation }) => {
                                             setIsFocus(false);
                                         }}
                                     />
-                                </View>
+                                    </View>
                                 </View>
                             </View>
-
-                            <View style={{ height: 330 }}></View>
+                            <View style={{ height: 80, marginTop:20 }}></View>
+                            <TouchableOpacity>
+                                <View style={styles.button}>
+                                    <Text style={styles.buttonTitle}>Update</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <View style={{ height: 100 }}></View>
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </SafeAreaView>
@@ -262,7 +286,6 @@ function useStyles() {
             backgroundColor: '#F2B518',
             borderRadius: 8,
             height: 48,
-            width: 120,
             justifyContent: 'center',
         },
         buttonTitle: {
@@ -388,7 +411,7 @@ function useStyles() {
             alignItems: 'center',
             justifyContent: 'center'
         },
-        customContainer:{
+          customContainer:{
             borderWidth:2,
             borderColor:'#ededed',
             borderRadius:5,
@@ -398,4 +421,4 @@ function useStyles() {
     });
 }
 
-export default ProfileScreen;
+export default EditProfileScreen;
