@@ -1,28 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, TouchableOpacity, View, Image } from 'react-native';
 import images from '../../../../assets/imagesPath';
+import Header from '../../../../util/header';
 
-const BlankScreen=()=> {
-    return (
-      <View style={styles.container}>
-      <Text style={styles.titleText}>
-        {"Video player In Progress"}
-        {"\n"}
-        {"\n"}
-      </Text>
-      <Image source = {images.appLogo}/>
-    </View>
-    );
+const BlankScreen = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+    <Header />
+        <Text style={styles.titleText}>
+          {"Video player In Progress"}
+          {"\n"}
+          {"\n"}
+        </Text>
+        <Image style={{alignSelf:'center'}} source={images.appLogo} />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection:'column',
+    color: '#ffffff',
+    backgroundColor: '#ffffff'
   },
-  titleText:{
+  titleText: {
     textAlign: 'center',
     fontWeight: 'bold',
     fontStyle: 'italic',

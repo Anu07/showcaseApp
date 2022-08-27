@@ -4,16 +4,21 @@ import {
   Text,
   View,
   TouchableOpacity,
+  StatusBar,
   SafeAreaView,
   Image,
   FlatList
 } from 'react-native';
+import images from '../../../assets/imagesPath';
 import Header from '../../../util/header';
 
 export default class Notifications extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      dataSource: [],
+  };
     this.state = {
       data: [
         { id: 3, image: "https://bootdey.com/img/Content/avatar/avatar7.png", name: "March SoulLaComa", text: "Liked your video.", attachment: "https://via.placeholder.com/100x100/FFB6C1/000000" },
@@ -27,19 +32,41 @@ export default class Notifications extends Component {
     }
   }
 
+    componentDidMount() {
+        this.setState({});
+        // const value =  AsyncStorage.getItem("apikey");
+        // console.log("auth Key", value);
+        fetch('https://showcasemedia.dcwebtech.com/api/getNotification', {
+          method: 'GET',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': 'WkxnhXFSWLDAdH57LDHmS0ENObRWzYea0WH25TMg'
+          }
+        })
+            .then(response => response.json())
+            .then((responseJson) => {
+                // setLoading(false);
+                this.setState({ dataSource: responseJson.items })
+                console.log("DATA PARSED 11",JSON.stringify(this.state.dataSource));
+            })
+            .catch(error => {
+                console.log(error)
+                // setLoading(false);
+            })
+    }
+
   render() {
     return (
       <SafeAreaView style={{
         flex: 1,
-        alignItems: 'center',
-        paddingStart: 50
       }}>
         <StatusBar animated={true}
           backgroundColor="#F2B518" />
         <Header title={"Notifications"} />
         <FlatList
           style={[styles.root, { flexGrow: 1 }]}
-          data={this.state.data}
+          data={this.state.dataSource}
           extraData={this.state}
           ItemSeparatorComponent={() => {
             return (
@@ -54,18 +81,15 @@ export default class Notifications extends Component {
             let attachment = <View />;
 
             let mainContentStyle;
-            if (Notification.attachment) {
-              mainContentStyle = styles.mainContent;
-              attachment = <Image style={styles.attachment} source={{ uri: Notification.attachment }} />
-            }
+           
             return (
               <View style={styles.container}>
-                <Image source={{ uri: Notification.image }} style={styles.avatar} />
+                <Image source={{ uri: images.appLogo }} style={styles.avatar} />
                 <View style={styles.content}>
                   <View style={mainContentStyle}>
                     <View style={styles.text}>
-                      <Text style={styles.name}>{Notification.name}</Text>
-                      <Text style={{ color: '#000000' }}>{Notification.text}</Text>
+                      <Text style={styles.name}>Video Status Notification</Text>
+                      <Text style={{ color: '#000000' }}>{Notification.video_notification}</Text>
                     </View>
                     <Text style={styles.timeAgo}>
                       2 hours ago

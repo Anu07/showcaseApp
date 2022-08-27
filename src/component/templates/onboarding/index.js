@@ -8,12 +8,12 @@ const OnboardingScreen = ({ navigation }) => (
     <Onboarding
         onDone={() => {
             console.log('done')
-            navigation.navigate("Record");
+            navigation.navigate("Drawer");
         }
         }
         onSkip={()=>{
             console.log('done')
-            navigation.navigate("Record");
+            navigation.navigate("Drawer");
         }
 
         }

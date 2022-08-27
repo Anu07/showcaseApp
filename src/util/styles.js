@@ -6,8 +6,10 @@ let screenHeight = Dimensions.get('window').height;
 let screenWidth = Dimensions.get('window').width;
 export default StyleSheet.create({
   container: {
-    flex: 1,
+    flex:1,
+    flexDirection:'column',
     color: '#ffffff',
+    justifyContent:'space-evenly',
     backgroundColor: '#ffffff'
   },
   containerRow: {
@@ -66,18 +68,22 @@ export default StyleSheet.create({
     marginLeft: 5
   },
   headerInnerStyle: { flexDirection: 'row', alignItems: 'center' },
-  headerIcon: { flex: 2, flexDirection: 'row', justifyContent: 'flex-start' },
+  headerIcon: { flex: 1, flexDirection: 'row',justifyContent: 'flex-start' },
   headerImage: {
     height: 30, width: 30, marginRight: 5,
     marginTop: 8,
     marginLeft: 10
   },
-  headerRightImage: { flex: 2, flexDirection: 'row', justifyContent: 'flex-end' },
+  headerRightImage: { width:120,flexDirection: 'row',marginTop:10, justifyContent: 'space-between'},
   parentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center'
+  },
+  dropdown: {
+    position: 'relative',
+    backgroundColor: '#fff',
   },
   logoImageStyle: {
     height: screenHeight,
@@ -91,6 +97,7 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     lineHeight: 20,
+    width:180,
     flexWrap: 'wrap'
   },
   root: {
@@ -103,6 +110,8 @@ export default StyleSheet.create({
     backgroundColor: '#F2B518',
     borderRadius: 8,
     height: 40,
+    width:120,
+    marginRight:10,
     justifyContent: 'center',
   },
   buttonTitle: {

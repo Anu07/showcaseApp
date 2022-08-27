@@ -1,5 +1,5 @@
 // Import React and Component
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -34,22 +34,27 @@ const RegisterScreen = ({ navigation }) => {
     const [emailerrortext, setEmailErrorText] = React.useState("");
     const [usernamerrortext, setUsernameErrorText] = React.useState("");
     const styles = useStyles();
-    const [toggleCheckBox, setToggleCheckBox] = useState(true)
+    const [toggleCheckBox, setToggleCheckBox] = useState(false)
     const onSignUp = async () => {
         if (username != "" && password != "" && email != "") {
             setLoading(true);
-            fetch('https://showcase.ampleteckdev.com/api/signup', {
+            var pushnotification = toggleCheckBox ? 1 : 0
+            console.log("Push notification", pushnotification)
+            const value = await AsyncStorage.getItem("fcmToken");
+            console.log("FCM", value);
+            fetch('https://showcasemedia.dcwebtech.com/api/signup', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json'
                 },
+
                 body: JSON.stringify({
                     name: username,
                     password: password,
                     email: email,
-                    pushnotification: "1"
-
+                    fcm_token: value,
+                    pushnotification: pushnotification
                 })
             })
                 .then(response => response.json())
@@ -58,7 +63,9 @@ const RegisterScreen = ({ navigation }) => {
                     if (responseJson.status == "Success") {
                         setLoading(false);
                         console.log(responseJson.id);
-                        AsyncStorage.setItem('id', responseJson.id);
+                        AsyncStorage.setItem('id', JSON.stringify(responseJson.data.id));
+                        AsyncStorage.setItem('apikey', responseJson.data.apikey);
+                        AsyncStorage.setItem('push', JSON.stringify(pushnotification));
                         notify(responseJson.message);
                         navigation.navigate("Onboarding");
                     } else {
@@ -68,11 +75,13 @@ const RegisterScreen = ({ navigation }) => {
                 .catch(error => console.log(error)) //to catch the errors if any
         }
         else if (username == "") {
+            const value = await AsyncStorage.getItem("fcmToken");
+            console.log("FCM", value);
             setUsernameErrorText("Username can't be left empty.")
         } else if (email == "") {
             setEmailErrorText("Email can't be left empty.");
         } else {
-            setPasswordErrorText("Pasword can't be left empty.")
+            setPasswordErrorText("Password can't be left empty.")
         }
     }
 
@@ -91,7 +100,7 @@ const RegisterScreen = ({ navigation }) => {
 
     return (
         <View style={[styles.root]}>
-            <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
+            <ImageBackground source={images.loginBg} resizeMode="cover" style={[styles.container,{paddingTop:20}]}>
                 <SafeAreaView style={styles.safeAreaView}>
                     <ScrollView contentContainerStyle={{ height: '100%' }}>
                         {Platform.OS === 'ios' ? <Header /> : <></>}
@@ -179,7 +188,7 @@ const RegisterScreen = ({ navigation }) => {
                                     Keyboard.dismiss()
                                     setShowPassword(true)
                                 }} />}
-                                />
+                            />
                             {passworderrortext != '' ? (
                                 <Text style={styles.errorTextStyle}>
                                     {passworderrortext}
@@ -213,16 +222,12 @@ const RegisterScreen = ({ navigation }) => {
                             <Text style={[styles.normalText, { color: "#9E9E9E", marginTop: 15, marginBottom: 15 }]}>By continuing, you agree to accept our Privacy Policy and Terms of Service.</Text>
                             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', marginTop: 20 }}>
                                 <Text style={{ justifyContent: 'center', color: '#9e9e9e' }}>Already have an account?</Text>
-                                <TouchableOpacity onPress={
-                                    console.log("Tesr ")
-                                }>
-                                    <Text style={{ color: '#F2B518', marginLeft: 10 }} onPress={() => {
-                                    navigation.navigate("Login");
-                                }}>Sign In</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                                    <Text style={{ color: '#F2B518', marginLeft: 10 }} >Sign In</Text>
                                 </TouchableOpacity>
                             </View>
+                            <View style={{ height: 50 }}></View>
                         </KeyboardAvoidingView>
-                        <View style={{ height: 210 }}></View>
                     </ScrollView>
                 </SafeAreaView>
             </ImageBackground>
@@ -285,11 +290,9 @@ function useStyles() {
             color: '#F2B518'
         },
         content: {
-            flex: 1,
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
             paddingHorizontal: 16,
-            paddingVertical: 32,
-            marginTop: 100
+            paddingVertical: 42,
         },
         forgotPasswordContainer: {
             alignItems: 'center',

@@ -5,9 +5,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../home';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Notifications from '../user/blank';
-import CameraScreen from '../record/Camera';
 import BlankScreen from '../user/blank';
 import ProfileScreen from '../profile';
+import VideoPicker from '../record/VideoPicker';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,7 +48,7 @@ function MyTabs() {
                     }
                 },
             })}  />
-            <Tab.Screen name="Upload" component={CameraScreen}  listeners={({ navigation, route }) => ({
+            <Tab.Screen name="Upload" component={VideoPicker}  listeners={({ navigation, route }) => ({
                 tabPress: e => {
                     if (route.state && route.state.routeNames.length > 0) {
                         navigation.navigate('Camera')

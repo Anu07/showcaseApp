@@ -38,34 +38,45 @@ const LoginScreen = ({ navigation }) => {
 
     const onLogin = async () => {
         if (username != "" && password != "") {
-            setLoading(true);
-            fetch('https://showcase.ampleteckdev.com/api/login', {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json'
-                                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            })
-                .then(response => response.json())
-                .then((responseJson) => {
-                    setLoading(false);
-                    console.log("api kket",responseJson.data.apikey);
-                    if (responseJson.status == "Success") {
-                        setLoading(false);
-                        notify("Login Successful");
-                        navigation.navigate("Drawer");
-                        console.log(responseJson.data.id);
-                        AsyncStorage.setItem('id', JSON.stringify(responseJson.data.id));
-                        AsyncStorage.setItem('apiKey', JSON.stringify(responseJson.data.apikey));
-                    } else {
-                        notify(responseJson.message);
+            try {
+                AsyncStorage.getItem('fcmToken',(err,item) => {
+                    if (item) {
+                        console.log("?FTOK", item);
+                        setLoading(true);
+                        fetch('https://showcasemedia.dcwebtech.com/api/login', {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json'
+                                            },
+                            body: JSON.stringify({
+                                username: username,
+                                password: password,
+                                fcm_token:item,
+                            })
+                        })
+                            .then(response => response.json())
+                            .then((responseJson) => {
+                                setLoading(false);
+                                console.log("api kket",responseJson.data.apikey);
+                                if (responseJson.status == "Success") {
+                                    setLoading(false);
+                                    notify("Login Successful");
+                                    navigation.navigate("Drawer");
+                                    console.log(responseJson.data.id);
+                                    AsyncStorage.setItem('id', JSON.stringify(responseJson.data.id));
+                                    saveData(responseJson.data.apikey);
+                                } else {
+                                    notify(responseJson.message);
+                                }
+                            })
+                            .catch(error => console.log(error)) //to catch the errors if any
                     }
-                })
-                .catch(error => console.log(error)) //to catch the errors if any
+                });
+            } catch (error) {
+                console.log("Error retrieving data" + error);
+            }
+            
         } else if (password == "") {
             setPasswordErrorText("Pasword can't be left empty.")
         } else if (username == "") {
@@ -74,7 +85,14 @@ const LoginScreen = ({ navigation }) => {
 
     }
 
-
+    const saveData = async (apikey) => {
+        try {
+            console.log(apikey);
+          await AsyncStorage.setItem("apikey", apikey)
+        } catch (e) {
+            console.log(e.message);
+        }
+      }
     const notify = (message) => {
         if (Platform.OS != 'android') {
             Snackbar.show({

@@ -65,7 +65,7 @@ const ForgotPassword = ({navigation}) => {
      */
     function callForgotPassword() {
         setLoading(true);
-        fetch('https://showcase.ampleteckdev.com/api/forgot', {
+        fetch('https://showcasemedia.dcwebtech.com/api/forgot', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

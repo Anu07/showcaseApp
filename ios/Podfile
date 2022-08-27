@@ -1,14 +1,18 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '11.0'
+platform :ios, '12.4'
+source 'https://github.com/CocoaPods/Specs.git'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'ShowcaseApp' do
   config = use_native_modules!
-
   # Flags change depending on the env values.
   flags = get_default_flags()
+  pod 'Firebase', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'GoogleUtilities', :modular_headers => true
+  $RNFirebaseAsStaticFramework = true
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -16,11 +20,12 @@ target 'ShowcaseApp' do
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
   )
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
-
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  
   target 'ShowcaseAppTests' do
     inherit! :complete
     # Pods for testing
@@ -36,4 +41,11 @@ target 'ShowcaseApp' do
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
+
+
+  # $static_framework = ['FlipperKit', 'Flipper', 'Flipper-Folly',
+  # 'CocoaAsyncSocket', 'ComponentKit', 'DoubleConversion',
+  # 'glog', 'Flipper-PeerTalk', 'Flipper-RSocket', 'Yoga', 'YogaKit',
+  # 'CocoaLibEvent', 'OpenSSL-Universal', 'boost-for-react-native']
+  
 end

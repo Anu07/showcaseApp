@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "344250856937",
+    "project_id": "showcase-windsor",
+    "storage_bucket": "showcase-windsor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:344250856937:android:24103744da8539e0b10778",
+        "android_client_info": {
+          "package_name": "com.showcaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "344250856937-aat6tnjjdaqh65jq7uj7c77febo12bqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXEOKx2a2JscgVgcAvVuvEGnkHPTjJvFQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "344250856937-aat6tnjjdaqh65jq7uj7c77febo12bqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

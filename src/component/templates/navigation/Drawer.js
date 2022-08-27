@@ -44,18 +44,18 @@ function CustomDrawerContent(props) {
             <Text style={styles.menuTitle}>Watch Videos</Text>
           </View>
         )}
-        onPress={() => props.navigation.navigate('Blank')}
+        onPress={() => props.navigation.navigate('Home')}
       />
       <DrawerItem
         label={() => (
           <View
             style={styles.menuLabelFlex}>
-            <Text style={styles.menuTitle}>Record Videos</Text>
+            <Text style={styles.menuTitle}>Record/Upload Videos</Text>
           </View>
         )}
-        onPress={() => props.navigation.navigate('Blank')}
+        onPress={() => props.navigation.navigate('Record')}
       />
-      <DrawerItem
+      {/* <DrawerItem
         label={() => (
           <View
             style={styles.menuLabelFlex}>
@@ -63,12 +63,12 @@ function CustomDrawerContent(props) {
           </View>
         )}
         onPress={() => props.navigation.navigate('Blank')}
-      />
+      /> */}
       <DrawerItem
         label={() => (
           <View
             style={styles.menuLabelFlex}>
-            <Text style={styles.menuTitle}>Notification</Text>
+            <Text style={styles.menuTitle}>Notification Settings</Text>
           </View>
         )}
         onPress={() => props.navigation.navigate('Settings')}

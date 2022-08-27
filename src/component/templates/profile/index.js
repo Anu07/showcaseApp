@@ -25,20 +25,41 @@ import ProfileHeader from '../../../util/ProfileHeader';
 const ProfileScreen = ({ navigation }) => {
     const styles = useStyles();
     const data = [
-        { label: 'SportsPerson', value: '1' },
-        { label: 'Music Artist', value: '2' },
-        { label: 'Vlogger', value: '3' },
-        { label: 'Choreographer', value: '4' },
-        { label: 'Pianist', value: '5' },
-        { label: 'Influencer', value: '6' },
+        { label: 'Sports', value: '1' },
+        { label: 'Arts', value: '2' },
     ];
-    const sportsData = [
-        { label: 'Rugby', value: '1' },
-        { label: 'Hockey', value: '2' },
-        { label: 'Cricket', value: '3' },
-        { label: 'Badminton', value: '4' },
-        { label: 'Swimmer', value: '5' },
+    const userTypeData = [
+        { label: 'Parent', value: '1' },
+        { label: 'Teacher', value: '2' },
+        { label: 'Guardian', value: '3' },
+        { label: 'Student', value: '4' },
+        { label: 'Other', value: '5' },
     ];
+    const ArtsData = [
+        { label: 'Art', value: '1' },
+        { label: 'Music', value: '2' },
+        { label: 'Acting', value: '3' },
+        { label: 'Dance', value: '4' },
+        { label: 'Other', value: '5' },
+    ];
+    const SportsData = [
+        { label: 'BaseBall', value: '1' },
+        { label: 'Bowling', value: '2' },
+        { label: 'CheerLeading', value: '3' },
+        { label: 'Cross-Country', value: '4' },
+        { label: 'Field Hockey', value: '5' },
+        { label: 'Football', value: '6' },
+        { label: 'Golf', value: '7' },
+        { label: 'Lacrosse', value: '8' },
+        { label: 'Soft Ball', value: '9' },
+        { label: 'Swimming', value: '10' },
+        { label: 'Tennis', value: '11' },
+        { label: 'Track', value: '12' },
+        { label: 'Volley Ball', value: '13' },
+        { label: 'Wresting', value: '14' },
+        { label: 'Other', value: '15' },
+    ];
+    const [choiceData, setChoiceData ]= useState([]);
     const [value, setValue] = useState(null);
     const [userType, setUserType] = useState(null);
     const [sportsValue, setSportsValue] = useState(null);
@@ -46,40 +67,44 @@ const ProfileScreen = ({ navigation }) => {
     const [loading, setLoading] = React.useState(false);
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
-    const [passworderrortext, setPasswordErrorText] = React.useState("");
-    const [usernameErrorText, setUsernameErrorText] = React.useState("");
-
+    const [placeholderText, setIsPlaceHolderText] = React.useState("List of Sports (Optional)");
 
     const getProfile = async () => {
         setLoading(true);
-        AsyncStorage.getItem('apikey').then((value) => {
-            console.log("ksdghj", value);
-            fetch('https://showcase.ampleteckdev.com/api/getuser', {
-                method: 'GET',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': '0WBVZ9CAJFbbmA3OSIfj8SoRYAhmMKImJQkYqEKt'
-                },
-            })
-                .then(response => response.json())
-                .then((responseJson) => {
-                    setLoading(false);
-                    console.log(responseJson);
-                    if (responseJson.status == "Success") {
-                        setUsername(responseJson.data.name);
-                        setEmail(responseJson.data.email);
-                    } else {
-                        notify(responseJson.message);
+        const value = await AsyncStorage.getItem("apikey");
+        console.log(value);
+        fetch('https://showcasemedia.dcwebtech.com/api/getuser', {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': value
+            },
+        })
+            .then(response => response.json())
+            .then((responseJson) => {
+                setLoading(false);
+                console.log(responseJson);
+                if (responseJson.status == "Success") {
+                    setUsername(responseJson.data.name);
+                    setEmail(responseJson.data.email);
+                    setUserType(responseJson.data.user_type);
+                    setSportsValue(responseJson.data.list_of_arts);
+                    setValue(responseJson.data.category);
+                    console.log("List",responseJson.data.category);
+                    if(responseJson.data.category == 1){
+                        setIsPlaceHolderText(SportsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
+                    }else{
+                        setIsPlaceHolderText(ArtsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
                     }
-                })
-                .catch(error => {
-                    console.log(error)
-                    setLoading(false);
-                }) //to catch the errors if any
-        }
-
-        );
+                } else {
+                    notify(responseJson.message);
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                setLoading(false);
+            }) //to catch the errors if any
     }
 
 
@@ -102,10 +127,10 @@ const ProfileScreen = ({ navigation }) => {
         <View style={styles.root}>
             <ImageBackground source={images.recordBg} resizeMode="cover" style={styles.container}>
                 <SafeAreaView style={styles.safeAreaView}>
-                    <ScrollView contentContainerStyle={{ height: '100%' }}>
+                    <ScrollView style={{ height: '100%' }}>
                         <KeyboardAvoidingView
                             style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 10 }}>
-                           <ProfileHeader title={"Profile"}/>
+                            <ProfileHeader title={"Profile"} />
                             <TextInput
                                 keyboardType="default"
                                 placeholder='Full Name'
@@ -172,11 +197,11 @@ const ProfileScreen = ({ navigation }) => {
                             <View style={{ flex: 1, margin: 10 }}>
                                 <View style={styles.customContainer}>
                                     <Dropdown
-                                        style={[styles.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
+                                        style={[commonStyle.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
                                         placeholderStyle={styles.placeholderStyle}
                                         selectedTextStyle={styles.selectedTextStyle}
                                         iconStyle={styles.iconStyle}
-                                        data={data}
+                                        data={userTypeData}
                                         maxHeight={300}
                                         labelField="label"
                                         valueField="value"
@@ -190,10 +215,10 @@ const ProfileScreen = ({ navigation }) => {
                                         }}
                                     />
                                 </View>
-                                <View style={{ flex: 1, marginTop: 20, marginBottom: 20 }}>
+                                <View style={{ flex: 1, marginTop: 20 }}>
                                     <View style={styles.customContainer}>
                                         <Dropdown
-                                            style={[styles.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
+                                            style={[commonStyle.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
                                             placeholderStyle={styles.placeholderStyle}
                                             selectedTextStyle={styles.selectedTextStyle}
                                             iconStyle={styles.iconStyle}
@@ -208,38 +233,44 @@ const ProfileScreen = ({ navigation }) => {
                                             onChange={item => {
                                                 setValue(item.value);
                                                 setIsFocus(false);
+                                                if(item.label == "Arts"){
+                                                    setChoiceData(ArtsData);
+                                                    setIsPlaceHolderText("List of Arts (Optional)");
+                                                }else if(item.label == "Sports"){
+                                                    setChoiceData(SportsData);
+                                                    setIsPlaceHolderText("List of Sports (Optional)");
+                                                }
                                             }}
                                         />
                                     </View>
                                 </View>
                                 {loading == true ? <ActivityIndicator size='large' style={styles.loading} color="#F2B518" /> : <></>}
-                                <View style={{ height: 30 }}></View>
-
-                                <View style={{ flex: 1, marginTop: 20 }}>
-                                <View style={styles.customContainer}>
-                                    <Dropdown
-                                        style={[styles.dropdown, isFocus && { borderColor: '#ededed', borderWidth: 1 }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
-                                        iconStyle={styles.iconStyle}
-                                        data={sportsData}
-                                        maxHeight={300}
-                                        labelField="label"
-                                        valueField="value"
-                                        placeholder='List of Sports (Optional)'
-                                        value={sportsValue}
-                                        onFocus={() => setIsFocus(true)}
-                                        onBlur={() => setIsFocus(false)}
-                                        onChange={item => {
-                                            setSportsValue(item.value);
-                                            setIsFocus(false);
-                                        }}
-                                    />
-                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <View style={[styles.customContainer, { marginTop: 20 }]}>
+                                        <Dropdown
+                                            style={[commonStyle.dropdown, isFocus && { borderColor: '#ededed', borderWidth: 1 }]}
+                                            placeholderStyle={styles.placeholderStyle}
+                                            selectedTextStyle={styles.selectedTextStyle}
+                                            iconStyle={styles.iconStyle}
+                                            data={choiceData}
+                                            maxHeight={300}
+                                            labelField="label"
+                                            valueField="value"
+                                            placeholder={placeholderText}
+                                            value={sportsValue}
+                                            onFocus={() => setIsFocus(true)}
+                                            onBlur={() => setIsFocus(false)}
+                                            onChange={item => {
+                                                console.log("Label", item.label)
+                                                setSportsValue(item.value);
+                                                setIsFocus(false);
+                                            }}
+                                        />
+                                    </View>
                                 </View>
                             </View>
 
-                            <View style={{ height: 330 }}></View>
+                            <View style={{ height: 230 }}></View>
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </SafeAreaView>
@@ -388,12 +419,12 @@ function useStyles() {
             alignItems: 'center',
             justifyContent: 'center'
         },
-        customContainer:{
-            borderWidth:2,
-            borderColor:'#ededed',
-            borderRadius:5,
-            padding:8,
-            height:50
+        customContainer: {
+            borderWidth: 2,
+            borderColor: '#ededed',
+            borderRadius: 5,
+            padding: 8,
+            height: 50
         }
     });
 }
