@@ -9,7 +9,7 @@ const Header = ({ title, parentCallback }) => {
     const navigation = useNavigation();
     const clicked = false;
     return (
-        < View style={{ paddingTop: 10, flex: 1, paddingBottom: 30 }} >
+        < View style={{ paddingTop: 10, flex: 1, marginTop:10 }} >
             <View style={style.headerInnerStyle}>
                 <View style={style.headerIcon}>
                     {title !== "Videos" || Platform.ios ?

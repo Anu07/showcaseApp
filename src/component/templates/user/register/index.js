@@ -54,6 +54,7 @@ const RegisterScreen = ({ navigation }) => {
                     password: password,
                     email: email,
                     fcm_token: value,
+                    schoolid:'scm_xM2930ysZi',
                     pushnotification: pushnotification
                 })
             })
@@ -106,7 +107,7 @@ const RegisterScreen = ({ navigation }) => {
                         {Platform.OS === 'ios' ? <Header /> : <></>}
                         <KeyboardAvoidingView
                             style={styles.content} >
-                            <Text style={styles.titleText}>Create your</Text>
+                            <Text style={[styles.titleText,{paddingTop:150}]}>Create your</Text>
                             <Text style={[styles.titleText, { color: '#F2B518' }]}>Account</Text>
 
                             <TextInput

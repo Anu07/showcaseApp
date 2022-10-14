@@ -23,7 +23,7 @@ export default class HomeScreen extends React.Component {
 
     componentDidMount() {
         this.setState({});
-        fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyBL9MYxrGoLPBgrsC6nQCtNJokFmno-6HY&channelId=UCH6GQETBTT26aQNGSr3EXjw&part=snippet,id&order=date&maxResults=10', {
+        fetch('https://www.googleapis.com/youtube/v3/search?key=AIzaSyCE_rjrrLhCFqkg6rxyiRR3-2kBu8X8Peg&channelId=UCH6GQETBTT26aQNGSr3EXjw&part=snippet,id&order=date&maxResults=10', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -105,7 +105,7 @@ export default class HomeScreen extends React.Component {
 
         return (
             <SafeAreaView style={styles.container}>
-                <View style={{ height: 55 }}>
+                <View style={{ height: 60,marginTop:10 }}>
                     <Header title={"Videos"} parentCallback={handleShow} />
                 </View>
                 {console.log("showcase render", this.state.showSearchBar)}

@@ -1,7 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.google.gms.google-services" // <- Add this line
-
-import com.android.build.OutputFile
+import com.android.build.*
 import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
@@ -135,7 +134,9 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
-
+    aaptOptions {
+        cruncherEnabled = false
+    }
     defaultConfig {
         applicationId "com.showcaseapp"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -145,6 +146,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         missingDimensionStrategy 'react-native-camera', 'general'
+        multiDexEnabled true
+        
 
         if (isNewArchitectureEnabled()) {
             // We configure the NDK build only if you decide to opt-in for the New Architecture.
@@ -232,6 +235,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('SHOWCASEAPP_STORE_FILE')) {
+                storeFile file(SHOWCASEAPP_STORE_FILE)
+                storePassword SHOWCASEAPP_STORE_PASSWORD
+                keyAlias SHOWCASEAPP_KEY_ALIAS
+                keyPassword SHOWCASEAPP_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -240,7 +251,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -269,7 +280,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-fs')
-
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {

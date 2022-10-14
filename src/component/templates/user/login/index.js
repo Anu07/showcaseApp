@@ -52,6 +52,7 @@ const LoginScreen = ({ navigation }) => {
                             body: JSON.stringify({
                                 username: username,
                                 password: password,
+                                schoolid:'scm_xM2930ysZi',
                                 fcm_token:item,
                             })
                         })
@@ -112,7 +113,7 @@ const LoginScreen = ({ navigation }) => {
                         {Platform.OS === 'ios' ? <Header /> : <></>}
                         <KeyboardAvoidingView
                             style={styles.content}>
-                            <Text style={styles.titleText}>Login into your</Text>
+                            <Text style={[styles.titleText,{paddingTop:250}]}>Login into your</Text>
                             <Text style={[styles.titleText, { color: '#F2B518' }]}>Account</Text>
                             <TextInput
                                 keyboardType="email-address"

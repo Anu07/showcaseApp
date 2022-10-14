@@ -71,7 +71,7 @@ export default StyleSheet.create({
   headerIcon: { flex: 1, flexDirection: 'row',justifyContent: 'flex-start' },
   headerImage: {
     height: 30, width: 30, marginRight: 5,
-    marginTop: 8,
+    marginTop: 12,
     marginLeft: 10
   },
   headerRightImage: { width:120,flexDirection: 'row',marginTop:10, justifyContent: 'space-between'},
@@ -83,7 +83,7 @@ export default StyleSheet.create({
   },
   dropdown: {
     position: 'relative',
-    backgroundColor: '#fff',
+    color:'#000'
   },
   logoImageStyle: {
     height: screenHeight,

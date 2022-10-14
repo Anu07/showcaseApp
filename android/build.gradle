@@ -38,10 +38,8 @@ allprojects {
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
-            url("https://mvn.jwplayer.com/content/repositories/releases/")
-
-        }
-        
+            }
+        jcenter()
         maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
@@ -49,9 +47,9 @@ allprojects {
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
             // older versions over there.
-            content {
-                excludeGroup "com.facebook.react"
-            }
+//            content {
+//                excludeGroup "com.facebook.react"
+//            }
         }
         google()
         maven { url 'https://www.jitpack.io' }
@@ -60,5 +58,6 @@ allprojects {
                 includeModule("com.yqritc", "android-scalablevideoview")
             }
         }
+        maven { url("https://mvn.jwplayer.com/content/repositories/releases/") }
     }
 }

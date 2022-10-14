@@ -59,7 +59,7 @@ const ProfileScreen = ({ navigation }) => {
         { label: 'Wresting', value: '14' },
         { label: 'Other', value: '15' },
     ];
-    const [choiceData, setChoiceData ]= useState([]);
+    const [choiceData, setChoiceData] = useState([]);
     const [value, setValue] = useState(null);
     const [userType, setUserType] = useState(null);
     const [sportsValue, setSportsValue] = useState(null);
@@ -91,11 +91,11 @@ const ProfileScreen = ({ navigation }) => {
                     setUserType(responseJson.data.user_type);
                     setSportsValue(responseJson.data.list_of_arts);
                     setValue(responseJson.data.category);
-                    console.log("List",responseJson.data.category);
-                    if(responseJson.data.category == 1){
-                        setIsPlaceHolderText(SportsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
-                    }else{
-                        setIsPlaceHolderText(ArtsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
+                    console.log("List", responseJson.data.category);
+                    if (responseJson.data.category == 1) {
+                        setIsPlaceHolderText(SportsData[responseJson.data.list_of_arts == 0 ? 0 : responseJson.data.list_of_arts - 1].label);
+                    } else {
+                        setIsPlaceHolderText(ArtsData[responseJson.data.list_of_arts == 0 ? 0 : responseJson.data.list_of_arts - 1].label);
                     }
                 } else {
                     notify(responseJson.message);
@@ -122,6 +122,7 @@ const ProfileScreen = ({ navigation }) => {
     useEffect(() => {
         getProfile();
     }, []);
+    
 
     return (
         <View style={styles.root}>
@@ -130,7 +131,9 @@ const ProfileScreen = ({ navigation }) => {
                     <ScrollView style={{ height: '100%' }}>
                         <KeyboardAvoidingView
                             style={{ flex: 1, paddingHorizontal: 10, paddingVertical: 10 }}>
-                            <ProfileHeader title={"Profile"} />
+                            <View style={{ height: 60, marginTop: 10, marginBottom:10 }}>
+                                <ProfileHeader title={"Profile"} />
+                            </View>
                             <TextInput
                                 keyboardType="default"
                                 placeholder='Full Name'
@@ -198,14 +201,15 @@ const ProfileScreen = ({ navigation }) => {
                                 <View style={styles.customContainer}>
                                     <Dropdown
                                         style={[commonStyle.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
+                                        placeholderStyle={{ color: '#000' }}
+                                        selectedTextStyle={{ color: '#000' }}
                                         iconStyle={styles.iconStyle}
                                         data={userTypeData}
                                         maxHeight={300}
                                         labelField="label"
                                         valueField="value"
                                         placeholder='User Type'
+                                        itemTextStyle={styles.label}
                                         value={userType}
                                         onFocus={() => setIsFocus(true)}
                                         onBlur={() => setIsFocus(false)}
@@ -219,11 +223,15 @@ const ProfileScreen = ({ navigation }) => {
                                     <View style={styles.customContainer}>
                                         <Dropdown
                                             style={[commonStyle.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            selectedTextStyle={styles.selectedTextStyle}
+                                            placeholderStyle={{ color: '#000' }}
+                                            selectedTextStyle={{ color: '#000' }}
+                                            dropDownContainerStyle={{
+                                                backgroundColor: '#F2B518'
+                                              }}
                                             iconStyle={styles.iconStyle}
                                             data={data}
                                             maxHeight={300}
+                                            itemTextStyle={styles.label}
                                             labelField="label"
                                             valueField="value"
                                             placeholder='Category'
@@ -233,10 +241,10 @@ const ProfileScreen = ({ navigation }) => {
                                             onChange={item => {
                                                 setValue(item.value);
                                                 setIsFocus(false);
-                                                if(item.label == "Arts"){
+                                                if (item.label == "Arts") {
                                                     setChoiceData(ArtsData);
                                                     setIsPlaceHolderText("List of Arts (Optional)");
-                                                }else if(item.label == "Sports"){
+                                                } else if (item.label == "Sports") {
                                                     setChoiceData(SportsData);
                                                     setIsPlaceHolderText("List of Sports (Optional)");
                                                 }
@@ -249,13 +257,14 @@ const ProfileScreen = ({ navigation }) => {
                                     <View style={[styles.customContainer, { marginTop: 20 }]}>
                                         <Dropdown
                                             style={[commonStyle.dropdown, isFocus && { borderColor: '#ededed', borderWidth: 1 }]}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            selectedTextStyle={styles.selectedTextStyle}
+                                            placeholderStyle={{ color: '#000' }}
+                                            selectedTextStyle={{ color: '#000' }}
                                             iconStyle={styles.iconStyle}
                                             data={choiceData}
                                             maxHeight={300}
                                             labelField="label"
                                             valueField="value"
+                                            itemTextStyle={styles.label}
                                             placeholder={placeholderText}
                                             value={sportsValue}
                                             onFocus={() => setIsFocus(true)}
@@ -270,7 +279,7 @@ const ProfileScreen = ({ navigation }) => {
                                 </View>
                             </View>
 
-                            <View style={{ height: 230 }}></View>
+                            <View style={{ height: 200 }}></View>
                         </KeyboardAvoidingView>
                     </ScrollView>
                 </SafeAreaView>
@@ -311,6 +320,16 @@ function useStyles() {
             justifyContent: 'flex-start',
             fontSize: 42,
         },
+        label: {
+            position: 'absolute',
+            backgroundColor: 'white',
+            left: 22,
+            top: 8,
+            zIndex: 999,
+            color:'#000000',
+            paddingHorizontal: 8,
+            fontSize: 16,
+          },
         errorTextStyle: {
             color: '#FF0000',
             textAlign: 'center',

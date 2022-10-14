@@ -97,11 +97,11 @@ const ForgotPassword = ({navigation}) => {
         <View style={[styles.root]}>
             <ImageBackground source={images.loginBg} resizeMode="cover" style={styles.container}>
                 <SafeAreaView style={styles.safeAreaView}>
-                    <ScrollView contentContainerStyle={{ height: '40%' }}>
+                    <ScrollView contentContainerStyle={{ height: '70%' }}>
                         {Platform.OS === 'ios' ? <Header title={"Forgot Password"} /> : <></>}
                         <KeyboardAvoidingView
-                            style={[styles.content, { marginTop: 50, paddingHorizontal: 20 }]}>
-                            <Text style={[styles.titleText, { paddingHorizontal: 20, paddingVertical: 20 }]}>Forgot Password?</Text>
+                            style={[styles.content, { paddingTop: 50}]}>
+                            <Text style={[styles.titleText, { paddingTop:50,paddingHorizontal: 10, paddingVertical: 10 }]}>Forgot Password?</Text>
                             <TextInput
                                 keyboardType="email-address"
                                 placeholder='Email'
@@ -114,14 +114,13 @@ const ForgotPassword = ({navigation}) => {
                                         background: '#F8F7FD',
                                     }
                                 }}
-                                returnKeyType="next"
-                                onSubmitEditing={() => { ref_input2.current.focus(); }}
+                                returnKeyType="done"
                                 onChangeText={(text) => {
-                                    setUsername(text)
                                     setEmailErrorText("")
                                 }}
-                                style={{ marginBottom: 10, borderWidth: 0 }}
-                                {...Platform.OS === 'android' ? mode = "outlined" : ""}
+                                style={{ marginBottom: 10, borderWidth: 1, borderRadius:5, borderColor:'#ededed' }}
+                                mode = "outlined"
+                                // {...Platform.OS === 'android' ? mode = "outlined" : ""}
                             />
 
                             {emailerrortext != '' ? (

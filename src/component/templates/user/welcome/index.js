@@ -11,7 +11,7 @@ export default class WelcomeScreen extends React.Component {
           <Image style={styles.image} source={images.logoOnly}></Image>
           <Text style={styles.welcome}>Welcome To</Text>
           <Text style={styles.titleText}>Showcase Media</Text>
-          <Text style={styles.subTitleText}>HOME OF THE BLACK KNIGHTS</Text>
+          {/* <Text style={styles.subTitleText}>HOME OF THE BLACK KNIGHTS</Text> */}
 
           <Text style={styles.normalText}> Share your video celebrating sports and arts achievement in the district.</Text>
           <Pressable style={[styles.button, { backgroundColor: "#004F93" }]} onPress={() => {

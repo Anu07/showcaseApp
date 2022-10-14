@@ -152,13 +152,13 @@ const EditProfileScreen = ({ navigation }) => {
                         setUserType(userTypeData[0].label)
 
                     }
-                   
-                        console.log("TTROOTK", responseJson.data.category)
-                        if(responseJson.data.category == 1){
-                            setIsPlaceHolderText(SportsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
-                        }else{
-                            setIsPlaceHolderText(ArtsData[responseJson.data.list_of_arts==0?0:responseJson.data.list_of_arts-1].label);
-                        }
+
+                    console.log("TTROOTK", responseJson.data.category)
+                    if (responseJson.data.category == 1) {
+                        setIsPlaceHolderText(SportsData[responseJson.data.list_of_arts == 0 ? 0 : responseJson.data.list_of_arts - 1].label);
+                    } else {
+                        setIsPlaceHolderText(ArtsData[responseJson.data.list_of_arts == 0 ? 0 : responseJson.data.list_of_arts - 1].label);
+                    }
                     if (responseJson.data.category != "") {
                         setValue(responseJson.data.category);
                     } else {
@@ -276,9 +276,10 @@ const EditProfileScreen = ({ navigation }) => {
                                 <View style={styles.customContainer}>
                                     <Dropdown
                                         style={[styles.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
-                                        placeholderStyle={styles.placeholderStyle}
-                                        selectedTextStyle={styles.selectedTextStyle}
+                                        placeholderStyle={{ color: '#000' }}
+                                        selectedTextStyle={{ color: '#000' }}
                                         iconStyle={styles.iconStyle}
+                                        itemTextStyle={styles.label}
                                         data={userTypeData}
                                         maxHeight={300}
                                         labelField="label"
@@ -297,11 +298,12 @@ const EditProfileScreen = ({ navigation }) => {
                                     <View style={styles.customContainer}>
                                         <Dropdown
                                             style={[commonStyle.dropdown, isFocus && { borderColor: '#FFFFFF' }]}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            selectedTextStyle={styles.selectedTextStyle}
                                             iconStyle={styles.iconStyle}
+                                            itemTextStyle={styles.label}
                                             data={data}
                                             maxHeight={300}
+                                            placeholderStyle={{ color: '#000' }}
+                                            selectedTextStyle={{ color: '#000' }}
                                             labelField="label"
                                             valueField="value"
                                             placeholder='Category'
@@ -327,13 +329,14 @@ const EditProfileScreen = ({ navigation }) => {
                                     <View style={styles.customContainer}>
                                         <Dropdown
                                             style={[commonStyle.dropdown, isFocus && { borderColor: '#ededed', borderWidth: 1 }]}
-                                            placeholderStyle={styles.placeholderStyle}
-                                            selectedTextStyle={styles.selectedTextStyle}
+                                            placeholderStyle={{ color: '#000' }}
+                                            selectedTextStyle={{ color: '#000' }}
                                             iconStyle={styles.iconStyle}
                                             data={choiceData}
                                             maxHeight={300}
                                             labelField="label"
                                             valueField="value"
+                                            itemTextStyle={styles.label}
                                             placeholder={placeholderText}
                                             value={sportsValue}
                                             onFocus={() => setIsFocus(true)}
@@ -438,12 +441,15 @@ function useStyles() {
             paddingHorizontal: 16,
         },
         label: {
-            color: '#9E9E9E',
-            fontSize: 15,
-            fontWeight: '400',
-            lineHeight: 20,
-            width: 80,
+            position: 'absolute',
+            left: 22,
+            color:'#000000',
+            top: 8,
+            zIndex: 999,
+            paddingHorizontal: 8,
+            fontSize: 16,
         },
+
         normalText: {
             color: "#9e9e9e",
             textAlign: 'center',
